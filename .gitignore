@@ -1,0 +1,4 @@
+*.fasta
+*.mgf
+__pycache__
+.idea
