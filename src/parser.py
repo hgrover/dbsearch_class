@@ -43,22 +43,36 @@ def mgf2(file_):
         yield i.groupdict()
 
 
+def fasta(fp):
+    curr_header = None
+    curr_seq = []
+    for line in fp:
+        if line.startswith('>'):
+            if curr_header:
+                yield {'header': curr_header,
+                       'seq': ''.join(curr_seq)}
+            curr_header = line[1:].strip()
+            curr_seq = []
+        else:
+            curr_seq.append(line.strip())
+
+
 
 if __name__ == "__main__":
     import os
     import pprint
-    mgf_file = os.path.join(os.getcwd(),
-                            '../test_data/1500cells_01.mzXML.MS2.HCD.mgf')
-    # fasta_file = os.path.join(os.getcwd(),
-    #                           '../testdata/proteome.fasta')
-    fh = open(mgf_file)
-    for spectrum in mgf(fh):
-        pprint.pprint(spectrum)
+    # mgf_file = os.path.join(os.getcwd(),
+    #                         '../test_data/1500cells_01.mzXML.MS2.HCD.mgf')
+    fasta_file = os.path.join(os.getcwd(),
+                              '../test_data/proteome.fasta')
+    # fh = open(mgf_file)
+    # for spectrum in mgf(fh):
+    #     pprint.pprint(spectrum)
     #     input()
     # for spectrum in mgf2(fh):
     #     pprint.pprint(spectrum)
     #     input()
 
-    # fh = open(fasta_file)
-    # for seq in fasta(fh):
-    #     pprint.pprint(seq)
+    fh = open(fasta_file)
+    for seq in fasta(fh):
+        pprint.pprint(seq)
